@@ -9,8 +9,12 @@ services:
       name: docker.io/library/drm-bot-2
       tag: latest
     ports:
-      - port: 8080
+      - port: 80
         protocol: http
     env:
-      - name: YOUR_ENV_VAR
-        value: your_value
+      - name: API_ID
+        value: "27743952"
+      - name: API_HASH
+        value: "416ba062bd16c6cf1aa38dd389726023"
+      - name: BOT_TOKEN
+        value: "7854261395:AAGaoidSBz91JdWtciRT_94pMJ5xqgUqx0M"
