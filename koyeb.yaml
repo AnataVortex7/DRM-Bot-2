@@ -17,4 +17,4 @@ services:
       - name: API_HASH
         value: "416ba062bd16c6cf1aa38dd389726023"
       - name: BOT_TOKEN
-        value: "7854261395:AAGaoidSBz91JdWtciRT_94pMJ5xqgUqx0M"
+        value: "7854261395:AAGFoRKyb7Xlx1TTOEpwuR5A3H-tnYLmdPo"
