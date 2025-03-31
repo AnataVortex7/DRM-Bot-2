@@ -5,7 +5,6 @@ from handlers.tg import TgClient, TgHandler
 import os
 import sys
 import shutil
-import time
 from handlers.downloader import download_handler, get_link_atributes
 from handlers.uploader import Upload_to_Tg
 
@@ -30,6 +29,7 @@ async def restart_handler(_, m):
     await m.reply_text(Msg.RESTART_MSG, True)
     os.execl(sys.executable, sys.executable, *sys.argv)
 
+
 error_list = []
 
 
@@ -39,7 +39,7 @@ error_list = []
 )
 async def Pro(bot: AFK, m: Message):
     sPath = f"{Config.DOWNLOAD_LOCATION}/{m.chat.id}"
-    tPath =  f"{Config.DOWNLOAD_LOCATION}/FILE/{m.chat.id}"#f"{Config.DOWNLOAD_LOCATION}/FILE/{m.chat.id}"
+    tPath = f"{Config.DOWNLOAD_LOCATION}/FILE/{m.chat.id}"
     os.makedirs(sPath, exist_ok=True)
     BOT = TgClient(bot, m, sPath)
     try:
@@ -76,13 +76,13 @@ async def Pro(bot: AFK, m: Message):
 
             if os.path.isfile(dl_file) is not None:
                 if dl_file.endswith(".mp4"):
-                    cap = f"{caption_name}.mp4\n\n<b>𝗕𝗮𝘁𝗰𝗵 𝗡𝗮𝗺𝗲 : </b>{caption}\n\n<b>𝗘𝘅𝘁𝗿𝗮𝗰𝘁𝗲𝗱 𝗯𝘆 ➤ </b> **{userr}**"
+                    cap = f"{caption_name}.mp4\n\n<b>🅵🅸🅻🅴  🅳🅴🆂🅲🆁🅸🅿🆃🅸🅾🅽 : </b>{caption}\n\n<b>🅱🅾🆃  ➤ </b> **{userr}**"
                     UL = Upload_to_Tg(bot=bot, m=m, file_path=dl_file, name=caption_name,
                                       Thumb=Thumb, path=sPath, show_msg=Show, caption=cap)
                     await UL.upload_video()
                 else:
                     ext = dl_file.split(".")[-1]
-                    cap = f"{caption_name}.{ext}\n\n<b>𝗕𝗮𝘁𝗰𝗵 𝗡𝗮𝗺𝗲 : </b>{caption}\n\n<b>𝗘𝘅𝘁𝗿𝗮𝗰𝘁𝗲𝗱 𝗯𝘆 ➤ </b> **{userr}**"
+                    cap = f"{caption_name}.{ext}\n\n<b>🅵🅸🅻🅴  🅳🅴🆂🅲🆁🅸🅿🆃🅸🅾🅽 : </b>{caption}\n\n<b>🅱🅾🆃  ➤ </b> **{userr}**"
                     UL = Upload_to_Tg(bot=bot, m=m, file_path=dl_file, name=caption_name,
                                       Thumb=Thumb, path=sPath, show_msg=Show, caption=cap)
                     await UL.upload_doc()
@@ -102,8 +102,8 @@ async def Pro(bot: AFK, m: Message):
             error_list.append(f"{caption_name}\n")
             try:
                 await Show.delete(True)
-            except:
-                pass
+            except Exception as del_err:
+                LOGS.error(str(del_err))
             await bot.send_message(
                 chat_id=Config.LOG_CH,
                 text=Msg.ERROR_MSG.format(
@@ -123,7 +123,6 @@ async def Pro(bot: AFK, m: Message):
     except Exception as e1:
         LOGS.error(str(e1))
         shutil.rmtree(tPath)
-        pass
 
     await BOT.linkMsg2(error_list)
     await m.reply_text("Done")
