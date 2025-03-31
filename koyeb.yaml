@@ -1,0 +1,16 @@
+name: drm-bot-2
+routes:
+  - name: main
+    src: http
+    dest: http
+services:
+  - name: drm-bot-2
+    image:
+      name: docker.io/library/drm-bot-2
+      tag: latest
+    ports:
+      - port: 8080
+        protocol: http
+    env:
+      - name: YOUR_ENV_VAR
+        value: your_value
