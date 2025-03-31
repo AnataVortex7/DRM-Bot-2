@@ -4,13 +4,11 @@ from pyrogram.enums import ChatMemberStatus, ChatMembersFilter
 from pyrogram import enums
 from pyrogram.types import ChatMember
 import asyncio
-import logging
 import tgcrypto
 from pyromod import listen
-import logging
-from tglogging import TelegramLogHandler
+from tglogging import TelegramLogHandler  # Removed duplicate logging import
 
-# Config 
+# Config
 class Config(object):
     BOT_TOKEN = os.environ.get("BOT_TOKEN", "")
     API_ID = int(os.environ.get("API_ID",  ""))
@@ -20,11 +18,17 @@ class Config(object):
 
     AUTH_USERS = os.environ.get('AUTH_USERS', '6488911325').split(',')
     for i in range(len(AUTH_USERS)):
-        AUTH_USERS[i] = int(AUTH_USERS[i])
+        try:
+            AUTH_USERS[i] = int(AUTH_USERS[i])
+        except ValueError:
+            raise ValueError(f"Invalid AUTH_USER ID: {AUTH_USERS[i]}")
 
     GROUPS = os.environ.get('GROUPS', '-1002075880942').split(',')
     for i in range(len(GROUPS)):
-        GROUPS[i] = int(GROUPS[i])
+        try:
+            GROUPS[i] = int(GROUPS[i])
+        except ValueError:
+            raise ValueError(f"Invalid GROUP ID: {GROUPS[i]}")
 
     LOG_CH = os.environ.get("LOG_CH", "-1002059340064")
 
@@ -36,7 +40,7 @@ logging.basicConfig(
     handlers=[
         TelegramLogHandler(
             token=Config.BOT_TOKEN, 
-            log_chat_id= Config.LOG_CH, 
+            log_chat_id=Config.LOG_CH, 
             update_interval=2, 
             minimum_lines=1, 
             pending_logs=200000),
@@ -47,10 +51,9 @@ logging.basicConfig(
 LOGGER = logging.getLogger(__name__)
 LOGGER.info("live log streaming to telegram.")
 
-
 # Store
 class Store(object):
-    CPTOKEN = "eyJhbGciOiJIUzM4NCIsInR5cCI6IkpXVCJ9.eyJpZCI6MzgzNjkyMTIsIm9yZ0lkIjoyNjA1LCJ0eXBlIjoxLCJtb2JpbGUiOiI5MTcwODI3NzQyODkiLCJuYW1lIjoiQWNlIiwiZW1haWwiOm51bGwsImlzRmlyc3RMb2dpbiI6dHJ1ZSwiZGVmYXVsdExhbmd1YWdlIjpudWxsLCJjb3VudHJ5Q29kZSI6IklOIiwiaXNJbnRlcm5hdGlvbmFsIjowLCJpYXQiOjE2NDMyODE4NzcsImV4cCI6MTY0Mzg4NjY3N30.hM33P2ai6ivdzxPPfm01LAd4JWv-vnrSxGXqvCirCSpUfhhofpeqyeHPxtstXwe0"
+    CPTOKEN = "eyJhbGciOiJIUzM4NCIsInR5cCI6IkpXVCJ9.eyJpZCI6MzgzNjkyMTIsIm9yZ0lkIjoyNjA1LCJ0eXBlIjoxLCJtb2JpbGUiOiI5MTcwODI3NzQyODkiLCJuYW1lIjoiQWNlIiwiZW1haWwiOm51bGwsImlzRmlyc3RMb2dpbiI6dHJ1ZSwi[...]"
     SPROUT_URL = "https://discuss.oliveboard.in/"
     ADDA_TOKEN = ""
     THUMB_URL = "https://telegra.ph/file/84870d6d89b893e59c5f0.jpg"
@@ -75,7 +78,6 @@ class Msg(object):
 
 # Prefixes
 prefixes = ["/", "~", "?", "!", "."]
-
 # Client
 plugins = dict(root="plugins")
 if __name__ == "__main__":
@@ -91,15 +93,14 @@ if __name__ == "__main__":
         api_hash=Config.API_HASH,
         sleep_threshold=120,
         plugins=plugins,
-        workdir= f"{Config.SESSIONS}/",
-        workers= 2,
+        workdir=f"{Config.SESSIONS}/",
+        workers=2,
     )
 
     chat_id = []
     for i, j in zip(Config.GROUPS, Config.AUTH_USERS):
         chat_id.append(i)
         chat_id.append(j)
-    
     
     async def main():
         await PRO.start()
