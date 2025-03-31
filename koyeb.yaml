@@ -9,7 +9,7 @@ services:
       name: docker.io/library/drm-bot-2
       tag: latest
     ports:
-      - port: 80
+      - port: 8080
         protocol: http
     env:
       - name: API_ID
